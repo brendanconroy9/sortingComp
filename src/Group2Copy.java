@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // To run on a single core, compile and then run as:
@@ -12,7 +14,7 @@ import java.util.Scanner;
 // To avoid file reading/writing connections to the server, run in /tmp 
 // of your lab machine.
 
-public class Group2 {
+public class Group2Copy {
 
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
@@ -75,64 +77,77 @@ public class Group2 {
 	}
 
 	private static class SortingCompetitionComparator implements Comparator<String> {
-		
-		@Override
-		public int compare(String s1, String s2) {
-			int num1 = Integer.parseInt(s1);
-			int num2 = Integer.parseInt(s2);
-			
-			int sum1 = getSumPrimeFactors(num1);
-			int sum2 = getSumPrimeFactors(num2);
-			
-			if (sum1 < sum2) {
-				return -1;
-			} else if (sum1 > sum2) {
-				return 1;
-			}
-			
-			// got here, so the two sums are equal. Compare the numbers 
-			// in the opposite order:
-			return num2 - num1;
-			
-		}
+    private static Map<Integer, Integer> primeFactorSumCache = new HashMap<>();
 
-		 // implements sieve of eratosthenes 
-		 private static int getSumPrimeFactors(int n) {
-			if (n <= 1) {
-				return 0; // No prime factors for non-positive numbers
-			}
-		
-			int sum = 0;
-			int sqrtN = (int) Math.sqrt(n);
-		
-			boolean[] isPrime = new boolean[sqrtN + 1];
-			// initializes logical array as true 
-			Arrays.fill(isPrime, true);
-		
-			for (int p = 2; p * p <= sqrtN; p++) {
-				if (isPrime[p]) {
-					for (int i = p * p; i <= sqrtN; i += p) {
-						isPrime[i] = false;
-					}
-				}
-			}
-		
-			for (int p = 2; p <= sqrtN; p++) {
-				if (isPrime[p] && n % p == 0) {
-					sum += p;
-					while (n % p == 0) {
-						n /= p;
-					}
-				}
-			}
-		
-			if (n > 1) {
-				sum += n; // n is prime
-			}
-		
-			return sum;
-		}
-		
+    @Override
+    public int compare(String s1, String s2) {
+        int num1 = Integer.parseInt(s1);
+        int num2 = Integer.parseInt(s2);
+
+        int sum1 = getSumPrimeFactorsCached(num1);
+        int sum2 = getSumPrimeFactorsCached(num2);
+
+        if (sum1 < sum2) {
+            return -1;
+        } else if (sum1 > sum2) {
+            return 1;
+        }
+
+        // got here, so the two sums are equal. Compare the numbers
+        // in the opposite order:
+        return num2 - num1;
+    }
+
+    private static int getSumPrimeFactorsCached(int n) {
+        if (primeFactorSumCache.containsKey(n)) {
+            return primeFactorSumCache.get(n);
+        }
+
+        // Calculate prime factors here and store the result in the cache
+        int sum = calculatePrimeFactors(n);
+        primeFactorSumCache.put(n, sum);
+
+        return sum;
+    }
+
+    // implements sieve of eratosthenes 
+    private static int calculatePrimeFactors(int n) {
+        if (n <= 1) {
+            return 0; // No prime factors for non-positive numbers
+        }
+    
+        int sum = 0;
+        int sqrtN = (int) Math.sqrt(n);
+    
+        boolean[] isPrime = new boolean[sqrtN + 1];
+        // initializes logical array as true 
+        Arrays.fill(isPrime, true);
+    
+        for (int p = 2; p * p <= sqrtN; p++) {
+            if (isPrime[p]) {
+                for (int i = p * p; i <= sqrtN; i += p) {
+                    isPrime[i] = false;
+                }
+            }
+        }
+    
+        for (int p = 2; p <= sqrtN; p++) {
+            if (isPrime[p] && n % p == 0) {
+                sum += p;
+                while (n % p == 0) {
+                    n /= p;
+                }
+            }
+        }
+    
+        if (n > 1) {
+            sum += n; // n is prime
+        }
+    
+        return sum;
+    }
+    
+
 		private static boolean isPrime(int n) {
 
             if (n <= 1) return false;
@@ -159,12 +174,12 @@ public class Group2 {
 			System.out.println("isPime(40464469) = " + isPrime(40464469)); // not prime
 			
 			
-			System.out.println("getSumPrimeFactors(11) = " + getSumPrimeFactors(11)); //should be 11
-			System.out.println("getSumPrimeFactors(20) = " + getSumPrimeFactors(20)); //should be 7
-			System.out.println("getSumPrimeFactors(100) = " + getSumPrimeFactors(100)); //should be 7
-			System.out.println("getSumPrimeFactors(999999937) = " + getSumPrimeFactors(999999937)); //should be 999999937
-			System.out.println("getSumPrimeFactors(23785129) = " + getSumPrimeFactors(23785129)); //should be 4877
-			System.out.println("getSumPrimeFactors(40464469) = " + getSumPrimeFactors(40464469)); //should be 13174
+			System.out.println("getSumPrimeFactors(11) = " + getSumPrimeFactorsCached(11)); //should be 11
+			System.out.println("getSumPrimeFactors(20) = " + getSumPrimeFactorsCached(20)); //should be 7
+			System.out.println("getSumPrimeFactors(100) = " + getSumPrimeFactorsCached(100)); //should be 7
+			System.out.println("getSumPrimeFactors(999999937) = " + getSumPrimeFactorsCached(999999937)); //should be 999999937
+			System.out.println("getSumPrimeFactors(23785129) = " + getSumPrimeFactorsCached(23785129)); //should be 4877
+			System.out.println("getSumPrimeFactors(40464469) = " + getSumPrimeFactorsCached(40464469)); //should be 13174
 			
 		}
 		
