@@ -111,19 +111,25 @@ public class Group2 {
         return sum;
     }
 
-    // implements modified sieve of eratosthenes algorithm to calculate the sum of the prime factors of a given number n.
+    // implements modified sieve of eratosthenes algorithm 
+    // to calculate the sum of the prime factors of a given number n.
     private static int calculatePrimeFactors(int n) {
+
+		// No prime factors for non-positive integers and 1
         if (n <= 1) {
-            return 0; // No prime factors for non-positive integers and 1
+            return 0; 
         }
     
         int sum = 0;
         int sqrtN = (int) Math.sqrt(n);
     
+		// initializes logical array as true,
+		// which means that we assume all numbers
+		// to be prime in the beginning.
         boolean[] isPrime = new boolean[sqrtN + 1];
-        // initializes logical array as true 
         Arrays.fill(isPrime, true);
-    
+		
+		// implements sieve of eratosthenes algorithm 
         for (int p = 2; p * p <= sqrtN; p++) {
             if (isPrime[p]) {
                 for (int i = p * p; i <= sqrtN; i += p) {
@@ -131,7 +137,8 @@ public class Group2 {
                 }
             }
         }
-    
+		
+		//Calculate the sum of the prime factors
         for (int p = 2; p <= sqrtN; p++) {
             if (isPrime[p] && n % p == 0) {
                 sum += p;
@@ -140,9 +147,10 @@ public class Group2 {
                 }
             }
         }
-    
+		
+		
         if (n > 1) {
-            sum += n; // n is prime
+            sum += n; // n is prime and we add it to the sum.
         }
     
         return sum;
