@@ -94,8 +94,7 @@ public class Group2 {
             return 1;
         }
 
-        // got here, so the two sums are equal. Compare the numbers
-        // in the opposite order:
+         // If the prime factor sums are equal, compare the numbers in reverse order
         return num2 - num1;
     }
 
@@ -104,7 +103,8 @@ public class Group2 {
             return primeFactorSumCache.get(n);
         }
 
-        // Calculate prime factors here and store the result in the cache
+        // Calculate the sum of the prime factors here and store the result in the cache.
+		// This can help us avoid redundant calculations when dealing with repetitive prime-sums.
         int sum = calculatePrimeFactors(n);
         primeFactorSumCache.put(n, sum);
 
@@ -114,7 +114,7 @@ public class Group2 {
     // implements modified sieve of eratosthenes algorithm to calculate the sum of the prime factors of a given number n.
     private static int calculatePrimeFactors(int n) {
         if (n <= 1) {
-            return 0; // No prime factors for non-positive numbers
+            return 0; // No prime factors for non-positive integers and 1
         }
     
         int sum = 0;
@@ -148,7 +148,11 @@ public class Group2 {
         return sum;
     }
     
+		// We have just implemented the method of checking prime in
+		// the CalculatePrimeFactors method. So the following isPrime
+		// method is not that necessary. So we commented all of them.
 
+		/*
 		private static boolean isPrime(int n) {
 
             if (n <= 1) return false;
@@ -164,15 +168,16 @@ public class Group2 {
 			
 			return true;
 		}
+		*/
 
 		public static void runComparatorTests() {		
-			System.out.println("isPime(12) = " + isPrime(12)); // not prime
-            System.out.println("isPrime(1) = " + isPrime(1)); // not prime
-			System.out.println("isPime(2) = " + isPrime(2)); // prime
-			System.out.println("isPime(11) = " + isPrime(11)); // prime
-			System.out.println("isPime(999999937) = " + isPrime(999999937)); // prime
-			System.out.println("isPime(23785129) = " + isPrime(23785129)); // not prime
-			System.out.println("isPime(40464469) = " + isPrime(40464469)); // not prime
+			// System.out.println("isPime(12) = " + isPrime(12)); // not prime
+            // System.out.println("isPrime(1) = " + isPrime(1)); // not prime
+			// System.out.println("isPime(2) = " + isPrime(2)); // prime
+			// System.out.println("isPime(11) = " + isPrime(11)); // prime
+			// System.out.println("isPime(999999937) = " + isPrime(999999937)); // prime
+			// System.out.println("isPime(23785129) = " + isPrime(23785129)); // not prime
+			// System.out.println("isPime(40464469) = " + isPrime(40464469)); // not prime
 			
 			
 			System.out.println("getSumPrimeFactors(11) = " + getSumPrimeFactorsCached(11)); //should be 11
